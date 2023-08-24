@@ -31,10 +31,10 @@ public class Main {
                                 AddData.addEmployee();
                                 break;
                             case "4":
-                                dataAdd = "appointments";
+                                // "appointments"
                                 break;
                             case "5":
-                                dataAdd = "medical_records";
+                                // "medical_records"
                                 break;
                             default:
                                 System.out.println("Invalid input");
