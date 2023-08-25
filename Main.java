@@ -32,15 +32,17 @@ public class Main {
                                 break;
                             case "4":
                                 // "appointments"
+                                AddData.addAppointment();
                                 break;
                             case "5":
                                 // "medical_records"
+                                AddData.addMedicalRecord();
                                 break;
                             default:
-                                System.out.println("Invalid input");
-                                operationMenu("Add");
+                                System.out.println("Invalid input, Try again.");
                                 break;
                         }
+                        operationMenu("Add");
                         dataAdd = scanner.nextLine();
                     }
                     break;
@@ -65,9 +67,9 @@ public class Main {
                             break;
                         default:
                             System.out.println("Invalid input");
-                            operationMenu("Update");
                             break;
                     }
+                    operationMenu("Update");
                     break;
                 case "4":
                     operationMenu("Delete");

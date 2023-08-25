@@ -4,6 +4,7 @@ import essentials.DataStructure;
 import essentials.DatabaseConnector;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class InsertData {
     public static void insertDoctor(Object[] data, String tableName) {
@@ -71,7 +72,6 @@ public class InsertData {
         String city = (String) convertedData[4].getValue();
         String country = (String) convertedData[5].getValue();
         String p_phone = (String) convertedData[6].getValue();
-        int d_id = (int) convertedData[7].getValue();
 
         // Query
         String queryColumn = "";
@@ -121,26 +121,6 @@ public class InsertData {
                     convertedData[0].getColumn() + "," + convertedData[data.length-2].getColumn() + ") " +
                     "values (" + p_id + "," + p_phone + ")");
             System.out.println("Phone added for patient inserted successfully in " + tableName);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-
-        // Appointment table
-        int id = DatabaseConnector.getID("appointment", "a_id");
-        if (++id == 0)
-            id = 1;
-
-        try {
-            stmt = connection.prepareStatement("insert into appointment (a_id, a_date, p_id, d_id) " +
-                    "values (?, ?, ?, ?)");
-            stmt.setInt(1, id);
-            stmt.setDate(2, new Date(System.currentTimeMillis()));
-            stmt.setInt(3, p_id);
-            stmt.setInt(4, d_id);
-
-            stmt.execute();
-            System.out.println("New Appointment inserted successfully in appointment");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -199,4 +179,103 @@ public class InsertData {
         }
     }
 
+    public static void insertAppointment(Object[] data, String tableName) {
+        Connection connection = DatabaseConnector.getConnection();
+
+        System.out.println("================");
+        PreparedStatement stmt;
+        DataStructure[] convertedData = new DataStructure[data.length];
+        for (int i = 0; i < data.length; i++) {
+            convertedData[i] = (DataStructure) data[i];
+        }
+
+        // Column wise data
+        int a_id = (int) convertedData[0].getValue();
+        Date a_date = (Date) convertedData[1].getValue();
+        int p_id = (int) convertedData[2].getValue();
+        int d_id = (int) convertedData[3].getValue();
+
+        // Query
+        String queryColumn = "";
+        for (int i = 0; i < data.length; i++) {
+            queryColumn += convertedData[i].getColumn();
+            if (i != data.length - 1)
+                queryColumn += ", ";
+        }
+
+        // Prepared Statement
+        try {
+            stmt = connection.prepareStatement("insert into " + tableName
+                    + " (" + queryColumn + ") " +
+                    "values (?, ?, ?, ?)");
+            stmt.setInt(1, a_id);
+            stmt.setDate(2, a_date);
+            stmt.setInt(3, p_id);
+            stmt.setInt(4, d_id);
+            stmt.execute();
+            System.out.println("New Appointment inserted successfully in " + tableName);
+        } catch (Exception e) {
+            System.out.println("Appointment already exists in " + tableName);
+        }
+    }
+
+    public static void insertMedicalRecord(Object[] data, String tableName) {
+        Connection connection = DatabaseConnector.getConnection();
+
+        System.out.println("================");
+        PreparedStatement stmt;
+        DataStructure[] convertedData = new DataStructure[data.length];
+        for (int i = 0; i < data.length; i++) {
+            convertedData[i] = (DataStructure) data[i];
+        }
+
+        // Column wise data
+        int r_id = (int) convertedData[0].getValue();
+        String diagnosis = (String) convertedData[1].getValue();
+        Date r_date = (Date) convertedData[2].getValue();
+        int reference = (int) convertedData[3].getValue();
+        int a_id = (int) convertedData[4].getValue();
+        ArrayList<String> drugs = (ArrayList<String>) convertedData[5].getValue();
+
+        // Query
+        String queryColumn = "";
+        for (int i = 0; i < data.length - 1; i++) {
+            queryColumn += convertedData[i].getColumn();
+            if (i != data.length - 2)
+                queryColumn += ", ";
+        }
+
+        // Prepared Statement
+        try {
+            stmt = connection.prepareStatement("insert into " + tableName
+                    + " (" + queryColumn + ") " +
+                    "values (?, ?, ?, ?, ?)");
+            stmt.setInt(1, r_id);
+            stmt.setString(2, diagnosis);
+            stmt.setDate(3, r_date);
+            stmt.setInt(4, reference);
+            stmt.setInt(5, a_id);
+            stmt.execute();
+            System.out.println("New Medical Record inserted successfully in " + tableName);
+        } catch (Exception e) {
+            System.out.println("Record already exists in " + tableName);
+        }
+
+        // Inserting drugs
+        try {
+            for (String drug : drugs) {
+                String query = "insert into " + tableName + "_drugs (" +
+                        convertedData[0].getColumn() + "," + convertedData[data.length-1].getColumn() + ") " +
+                        "values (?, ?)";
+                PreparedStatement stmt1 = connection.prepareStatement(query);
+                stmt1.setInt(1, r_id);
+                stmt1.setString(2, drug);
+                stmt1.execute();
+            }
+            System.out.println("Drugs inserted successfully in " + tableName);
+        } catch (Exception e) {
+            System.out.println("hello");
+            System.out.println(e);
+        }
+    }
 }

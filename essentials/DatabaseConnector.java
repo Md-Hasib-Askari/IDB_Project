@@ -62,12 +62,12 @@ public class DatabaseConnector {
             InsertData.insertDoctor(data, tableName);
         else if (tableName.equals("patient"))
             InsertData.insertPatient(data, tableName);
-        else if (tableName.equals("employees"))
+        else if (tableName.equals("employee"))
             InsertData.insertEmployee(data, tableName);
-//        else if (tableName.equals("appointments"))
-//            InsertData.insertAppointment(data, tableName);
-//        else if (tableName.equals("medical_records"))
-//            InsertData.insertMedicalRecord(data, tableName);
+        else if (tableName.equals("appointment"))
+            InsertData.insertAppointment(data, tableName);
+        else if (tableName.equals("record"))
+            InsertData.insertMedicalRecord(data, tableName);
         else
             System.out.println("Invalid table name");
     }

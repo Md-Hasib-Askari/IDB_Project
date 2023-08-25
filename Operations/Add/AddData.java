@@ -4,6 +4,8 @@ import essentials.DataStructure;
 import essentials.DatabaseConnector;
 import essentials.View.ShowData;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AddData {
@@ -21,8 +23,7 @@ public class AddData {
             System.out.println("Invalid input");
             genderInt = scanner.nextInt();
         }
-        if (genderInt == 1) gender = "m";
-        else if (genderInt == 2) gender = "f";
+        if (genderInt == 2) gender = "f";
         scanner.nextLine();
         System.out.println("$ Enter Doctor's Phone Number");
         String phoneNumber = scanner.nextLine();
@@ -72,9 +73,7 @@ public class AddData {
         String country = scanner.nextLine();
         System.out.println("$ Enter Patient's Phone Number");
         String phoneNumber = scanner.nextLine();
-        System.out.println("$ Select Doctor");
-        ShowData.showDoctors();
-        int doctorID = scanner.nextInt();
+
 
         // Patient ID
         int id = DatabaseConnector.getID("patient", "p_id");
@@ -91,7 +90,6 @@ public class AddData {
         data[4] = new DataStructure("city", city);
         data[5] = new DataStructure("country", country);
         data[6] = new DataStructure("p_phone", phoneNumber);
-        data[7] = new DataStructure("d_id", doctorID);
 
         // Database Insertion
         DatabaseConnector.insert(data, "patient");
@@ -135,10 +133,101 @@ public class AddData {
         data[2] = new DataStructure("e_gender", gender);
         data[3] = new DataStructure("job", job);
         data[4] = new DataStructure("d_id", doctorID);
-        data[5] = new DataStructure("p_phone", phoneNumber);
+        data[5] = new DataStructure("e_phone", phoneNumber);
 
         // Database Insertion
         DatabaseConnector.insert(data, "employee");
+    }
 
+    public static void addAppointment() {
+        // Taking information
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Add Appointment");
+        System.out.println("=====================================");
+        System.out.println("$ Patient Phone Number");
+        String p_phone = scanner.nextLine();
+
+        // Patient ID from Phone Number
+        ShowData.getPatient(p_phone);
+        System.out.println("$ Enter Patient ID");
+        int p_id = scanner.nextInt();
+
+        System.out.println("$ Select Doctor");
+        ShowData.showDoctors();
+        int doctorID = scanner.nextInt();
+
+        // Appointment ID
+        int id = DatabaseConnector.getID("appointment", "a_id");
+        if (++id == 0) {
+            id = 1;
+        }
+
+
+        // Creating Column Name, Value Pair
+        DataStructure[] data = new DataStructure[4];
+        data[0] = new DataStructure("a_id", id);
+        data[1] = new DataStructure("a_date", new Date(System.currentTimeMillis()));
+        data[2] = new DataStructure("p_id", p_id);
+        data[3] = new DataStructure("d_id", doctorID);
+
+        // Database Insertion
+        DatabaseConnector.insert(data, "appointment");
+    }
+
+    public static void addMedicalRecord() {
+        // Taking information
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Add Medical Record");
+        System.out.println("=====================================");
+        System.out.println("$ Patient Phone Number");
+        String p_phone = scanner.nextLine();
+
+        // Patient ID from Phone Number
+        ShowData.getPatient(p_phone);
+        System.out.println("$ Enter Patient ID");
+        int p_id = scanner.nextInt();
+
+        System.out.println("$ Select Doctor");
+        ShowData.showDoctor(p_id);
+        int doctorID = scanner.nextInt();
+
+        // Record ID
+        int id = DatabaseConnector.getID("record", "r_id");
+        if (++id == 0) {
+            id = 1;
+        }
+
+        // Appointment ID
+        System.out.println("$ Select Appointment");
+        ShowData.getAppointmentID(p_id, doctorID);
+        int a_id = scanner.nextInt();
+
+        // Diagnosis
+        scanner.nextLine();
+        System.out.println("$ Enter Diagnosis");
+        String diagnosis = scanner.nextLine();
+
+        // Prescription - Drugs
+        System.out.println("$ Enter Prescription (Enter 'done' to stop)");
+        ArrayList<String> prescription = new ArrayList<>();
+        String drug = scanner.nextLine();
+        while (!drug.equals("done")){
+            System.out.println("$ Enter Drug Name");
+            prescription.add(drug);
+            drug = scanner.nextLine();
+        }
+
+
+        // Creating Column Name, Value Pair
+        DataStructure[] data = new DataStructure[6];
+        data[0] = new DataStructure("r_id", id);
+        data[1] = new DataStructure("diagnosis", diagnosis);
+        data[2] = new DataStructure("r_date", new Date(System.currentTimeMillis()));
+        data[3] = new DataStructure("reference", doctorID);
+        data[4] = new DataStructure("a_id", a_id);
+        data[5] = new DataStructure("r_drug", prescription);
+
+        // Database Insertion
+        DatabaseConnector.insert(data, "record");
     }
 }
