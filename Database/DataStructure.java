@@ -1,4 +1,4 @@
-package essentials;
+package Database;
 
 public class DataStructure {
     private String column;

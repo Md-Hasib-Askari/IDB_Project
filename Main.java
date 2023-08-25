@@ -1,5 +1,6 @@
 import Operations.Add.AddData;
-import essentials.DatabaseConnector;
+import Database.DatabaseConnector;
+import Operations.Update.UpdateData;
 
 import java.util.Scanner;
 
@@ -17,25 +18,29 @@ public class Main {
                     DatabaseConnector.getTables();
                     break;
                 case "2":
+                    // Insert Operation
                     operationMenu("Add");
                     String dataAdd = scanner.nextLine();
                     while (!dataAdd.equals("#")) {
                         switch (dataAdd) {
                             case "1":
+                                // Doctor
                                 AddData.addDoctor();
                                 break;
                             case "2":
+                                // Patient
                                 AddData.addPatient();
                                 break;
                             case "3":
+                                // Employee
                                 AddData.addEmployee();
                                 break;
                             case "4":
-                                // "appointments"
+                                // Appointment
                                 AddData.addAppointment();
                                 break;
                             case "5":
-                                // "medical_records"
+                                // Medical Record
                                 AddData.addMedicalRecord();
                                 break;
                             default:
@@ -47,23 +52,29 @@ public class Main {
                     }
                     break;
                 case "3":
+                    // Update Operation
                     operationMenu("Update");
                     String dataUpdate = scanner.nextLine();
                     switch (dataUpdate) {
                         case "1":
-                            dataUpdate = "doctors";
+                            // Doctor
+                            UpdateData.updateDoctor();
                             break;
                         case "2":
-                            dataUpdate = "patients";
+                            // Patient
+                            UpdateData.updatePatient();
                             break;
                         case "3":
-                            dataUpdate = "employees";
+                            // Employee
+                            UpdateData.updateEmployee();
                             break;
                         case "4":
-                            dataUpdate = "appointments";
+                            // Appointment
+                            UpdateData.updateAppointment();
                             break;
                         case "5":
-                            dataUpdate = "medical_records";
+                            // Medical Record
+                            UpdateData.updateMedicalRecord();
                             break;
                         default:
                             System.out.println("Invalid input");
@@ -72,6 +83,7 @@ public class Main {
                     operationMenu("Update");
                     break;
                 case "4":
+                    // Delete Operation
                     operationMenu("Delete");
                     String dataDelete = scanner.nextLine();
                     switch (dataDelete) {
@@ -97,33 +109,35 @@ public class Main {
                     }
                     break;
                 case "5":
-                    operationMenu("Search");
-                    String dataSearch = scanner.nextLine();
-                    switch (dataSearch) {
+                    // View Operation
+                    operationMenu("View");
+                    String dataView = scanner.nextLine();
+                    switch (dataView) {
                         case "1":
-                            dataSearch = "doctors";
+                            dataView = "doctors";
                             break;
                         case "2":
-                            dataSearch = "patients";
+                            dataView = "patients";
                             break;
                         case "3":
-                            dataSearch = "employees";
+                            dataView = "employees";
                             break;
                         case "4":
-                            dataSearch = "appointments";
+                            dataView = "appointments";
                             break;
                         case "5":
-                            dataSearch = "medical_records";
+                            dataView = "medical_records";
                             break;
                         default:
                             System.out.println("Invalid input");
-                            operationMenu("Search");
                             break;
                     }
+                    operationMenu("View");
                     break;
                 default:
                     System.out.println("Invalid input");
             }
+            DatabaseConnector.close();
             mainMenu();
             input = scanner.nextLine();
         }

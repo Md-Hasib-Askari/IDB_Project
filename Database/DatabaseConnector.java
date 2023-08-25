@@ -1,8 +1,10 @@
-package essentials;
+package Database;
 
-import essentials.Insert.InsertData;
+import Database.Insert.InsertData;
+import Database.Update.UpdateData;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DatabaseConnector {
     static String jdbcUrl = "jdbc:oracle:thin:@//localhost:1521/xe";
@@ -84,33 +86,37 @@ public class DatabaseConnector {
         }
     }
 
-    private static void getUser(int id) {
+    public static ArrayList<Object> getData(String tableName, int id, String colName) {
+        ArrayList<Object> data = new ArrayList<>();
         try {
-            PreparedStatement stmt = connection.prepareStatement("select id, name, password, gender from users where id = ?");
+            PreparedStatement stmt = connection.prepareStatement("select * from "+tableName+" where "+colName+" = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+            int colCount = rs.getMetaData().getColumnCount();
             while (rs.next())
-                System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getString(3) + "  " + rs.getString(4));
+                for (int i = 0; i < colCount; i++) data.add(rs.getObject(i + 1));
 
         } catch (Exception e) {
             System.out.println(e);
+            System.out.println("HELLO");
+
         }
+        return data;
     }
 
-    private static void update(String password, int id) {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("update users set password = ? where id = ?");
-            stmt.setString(1, password);
-            stmt.setInt(2, id);
-            stmt.execute();
-            if (stmt.getUpdateCount() == 1) {
-                System.out.println("Update Successful!!!");
-                getUser(id);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    public static void update(String tableName, int id, ArrayList<DataStructure> data) {
+        if (tableName.equals("doctor"))
+            UpdateData.updateDoctor(id, data);
+        else if (tableName.equals("patient"))
+            UpdateData.updatePatient(id, data);
+        else if (tableName.equals("employee"))
+            UpdateData.updateEmployee(id, data);
+        else if (tableName.equals("appointment"))
+            UpdateData.updateAppointment(id, data);
+        else if (tableName.equals("record"))
+            UpdateData.updateMedicalRecord(id, data);
+        else
+            System.out.println("Invalid table name");
     }
 
     private static void delete(int id) {

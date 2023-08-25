@@ -1,7 +1,7 @@
-package essentials.Insert;
+package Database.Insert;
 
-import essentials.DataStructure;
-import essentials.DatabaseConnector;
+import Database.DataStructure;
+import Database.DatabaseConnector;
 
 import java.sql.*;
 import java.util.ArrayList;

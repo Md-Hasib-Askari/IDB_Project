@@ -1,8 +1,8 @@
 package Operations.Add;
 
-import essentials.DataStructure;
-import essentials.DatabaseConnector;
-import essentials.View.ShowData;
+import Database.DataStructure;
+import Database.DatabaseConnector;
+import Database.View.ShowData;
 
 import java.sql.Date;
 import java.util.ArrayList;

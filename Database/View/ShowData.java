@@ -1,6 +1,6 @@
-package essentials.View;
+package Database.View;
 
-import essentials.DatabaseConnector;
+import Database.DatabaseConnector;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,6 +23,28 @@ public class ShowData {
                         rs.getInt(5));
             }
             System.out.println("================");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void showDoctorByPhone(String phone) {
+        try {
+            Connection connection = DatabaseConnector.getConnection();
+            System.out.println("================");
+            System.out.println("Doctors");
+            System.out.println("================");
+            System.out.println("ID\tName\tGender\tSpecialist\tExperience");
+            System.out.println("====================================================");
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from doctor where d_id=(select d_id from doctor_phone where d_phone = '" + phone + "') order by d_id");
+            while (rs.next()) {
+                System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" +
+                        rs.getString(3) + "\t" + rs.getString(4) + "\t" +
+                        rs.getInt(5));
+            }
+            System.out.println("================");
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -72,26 +94,25 @@ public class ShowData {
         }
     }
 
-    public static void getPatientRecord(String phone) {
+    public static void showCity() {
         try {
             Connection connection = DatabaseConnector.getConnection();
             System.out.println("================");
-            System.out.println("Patients");
+            System.out.println("City List");
             System.out.println("================");
-            System.out.println("ID\tName\tAge\tGender\tCity");
-            System.out.println("====================================================");
+            System.out.println("City\t\tCountry");
+            System.out.println("================");
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select p_id from patient_phone where p_phone = " + phone + " order by p_id");
+            ResultSet rs = stmt.executeQuery("select * from patient_address order by city");
             while (rs.next()) {
-                System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" +
-                        rs.getString(3) + "\t" + rs.getString(4) + "\t" +
-                        rs.getInt(5));
+                System.out.println(rs.getString(1) + "\t\t" + rs.getString(2));
             }
             System.out.println("================");
         } catch (Exception e) {
             System.out.println(e);
         }
     }
+
     public static void getAppointmentID(int p_id, int d_id) {
         try {
             Connection connection = DatabaseConnector.getConnection();
