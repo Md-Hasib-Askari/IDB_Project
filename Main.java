@@ -1,3 +1,4 @@
+import Database.Search.SearchData;
 import Database.View.ShowTableData;
 import Operations.Add.AddData;
 import Database.DatabaseConnector;
@@ -145,21 +146,37 @@ public class Main {
                     // Search Operation
                     operationMenu("Search");
                     String dataSearch = scanner.nextLine();
+                    String name = "";
                     switch (dataSearch) {
                         case "1":
-                            dataSearch = "doctors";
+                            // Doctor
+                            System.out.println("Enter Doctor's Name");
+                            name = scanner.nextLine();
+                            SearchData.doctorSearch(name);
                             break;
                         case "2":
-                            dataSearch = "patients";
+                            // Patient
+                            System.out.println("Enter Patient's Name");
+                            name = scanner.nextLine();
+                            SearchData.patientSearch(name);
                             break;
                         case "3":
-                            dataSearch = "employees";
+                            // Employee
+                            System.out.println("Enter Employee's Name");
+                            name = scanner.nextLine();
+                            SearchData.employeeSearch(name);
                             break;
                         case "4":
-                            dataSearch = "appointments";
+                            // Appointment
+                            System.out.println("Enter Patient's Name");
+                            name = scanner.nextLine();
+                            SearchData.appointmentSearch(name);
                             break;
                         case "5":
-                            dataSearch = "medical_records";
+                            // Medical Record
+                            System.out.println("Enter Patient's Name");
+                            name = scanner.nextLine();
+                            SearchData.recordSearch(name);
                             break;
                         default:
                             System.out.println("Invalid input");
