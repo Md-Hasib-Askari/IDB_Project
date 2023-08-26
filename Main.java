@@ -1,3 +1,4 @@
+import Database.View.ShowTableData;
 import Operations.Add.AddData;
 import Database.DatabaseConnector;
 import Operations.Update.UpdateData;
@@ -114,25 +115,57 @@ public class Main {
                     String dataView = scanner.nextLine();
                     switch (dataView) {
                         case "1":
-                            dataView = "doctors";
+                            // Doctor
+                            ShowTableData.doctorView();
                             break;
                         case "2":
-                            dataView = "patients";
+                            // Patient
+                            ShowTableData.patientView();
                             break;
                         case "3":
-                            dataView = "employees";
+                            // Employee
+                            ShowTableData.employeeView();
                             break;
                         case "4":
                             dataView = "appointments";
+                            // Appointment
+                            ShowTableData.appointmentView();
                             break;
                         case "5":
-                            dataView = "medical_records";
+                            // Medical Record
+                            ShowTableData.recordView();
                             break;
                         default:
                             System.out.println("Invalid input");
+                            operationMenu("View");
                             break;
                     }
-                    operationMenu("View");
+                    break;
+                case "6":
+                    // Search Operation
+                    operationMenu("Search");
+                    String dataSearch = scanner.nextLine();
+                    switch (dataSearch) {
+                        case "1":
+                            dataSearch = "doctors";
+                            break;
+                        case "2":
+                            dataSearch = "patients";
+                            break;
+                        case "3":
+                            dataSearch = "employees";
+                            break;
+                        case "4":
+                            dataSearch = "appointments";
+                            break;
+                        case "5":
+                            dataSearch = "medical_records";
+                            break;
+                        default:
+                            System.out.println("Invalid input");
+                            operationMenu("Search");
+                            break;
+                    }
                     break;
                 default:
                     System.out.println("Invalid input");
@@ -152,7 +185,8 @@ public class Main {
         System.out.println("2. Add Data");
         System.out.println("3. Update Data");
         System.out.println("4. Delete Data");
-        System.out.println("5. Search Data");
+        System.out.println("5. View Data");
+        System.out.println("6. Search Data");
         System.out.println("q. quit");
     }
 

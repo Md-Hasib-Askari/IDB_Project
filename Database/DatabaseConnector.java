@@ -119,19 +119,21 @@ public class DatabaseConnector {
             System.out.println("Invalid table name");
     }
 
-    private static void delete(int id) {
+    public static void delete(int id, String tableName) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
-            PreparedStatement stmt = con.prepareStatement("delete from users where id = ?");
-            stmt.setInt(1, id);
-            stmt.execute();
-//            if (stmt.getUpdateCount() == 1) {
-//                System.out.println("Delete Successful!!!");
-//                getAll();
-//            }
-            con.close();
+            Statement stmt = connection.createStatement();
+            if (tableName.equals("doctor"))
+                stmt.executeUpdate("delete from doctor_phone where d_id = " + id);
+            else if (tableName.equals("patient"))
+                stmt.executeUpdate("delete from patient where d_id = " + id);
+            else if (tableName.equals("employee"))
+                stmt.executeUpdate("delete from employee where d_id = " + id);
+            else if (tableName.equals("appointment"))
+                stmt.executeUpdate("delete from appointment where a_id = " + id);
+            else if (tableName.equals("record"))
+                stmt.executeUpdate("delete from record where r_id = " + id);
+            else
+                System.out.println("Invalid table name");
 
         } catch (Exception e) {
             System.out.println(e);
